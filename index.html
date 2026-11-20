@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>m4s1 ♡</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #f8e9ed;
+    font-family: 'Arial', sans-serif;
+    color: #754b59;
+    text-align: center;
+}
+
+header {
+    padding: 35px 10px;
+}
+
+h1 {
+    font-size: 65px;
+    letter-spacing: 8px;
+    margin: 10px;
+    color: #bd7893;
+}
+
+.subtitle {
+    font-size: 15px;
+    letter-spacing: 3px;
+}
+
+.upload {
+    margin: 20px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.upload label {
+    display: inline-block;
+    padding: 13px 25px;
+    background: #d89bb0;
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+#collage {
+    columns: 3 180px;
+    column-gap: 12px;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+.photo {
+    width: 100%;
+    display: block;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    border: 5px solid white;
+    box-shadow: 0 3px 10px #00000018;
+    break-inside: avoid;
+    transition: transform .3s;
+}
+
+.photo:hover {
+    transform: rotate(-2deg) scale(1.03);
+}
+
+.qr-section {
+    margin: 70px auto 30px;
+    padding: 30px;
+    background: white;
+    border-radius: 20px;
+    max-width: 400px;
+}
+
+.qr-section h2 {
+    color: #bd7893;
+}
+
+#qr {
+    width: 180px;
+    margin: 15px auto;
+    display: block;
+}
+
+#url {
+    width: 90%;
+    padding: 12px;
+    border: 1px solid #d89bb0;
+    border-radius: 10px;
+}
+
+button {
+    background: #d89bb0;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+footer {
+    margin-top: 50px;
+    padding: 20px;
+    color: #bd7893;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>m4s1</h1>
+    <p class="subtitle">♡ MY LITTLE PHOTO WORLD ♡</p>
+</header>
+
+<div class="upload">
+    <label for="photos">+ Agregar mis fotos</label>
+    <input type="file" id="photos" accept="image/*" multiple>
+</div>
+
+<div id="collage"></div>
+
+<section class="qr-section">
+    <h2>♡ VISITA MI PÁGINA ♡</h2>
+    <p>Escanea este código QR para entrar.</p>
+
+    <input
+      type="url"
+      id="url"
+      placeholder="Pega aquí el enlace de tu página"
+    >
+
+    <br>
+
+    <button onclick="generarQR()">
+        Generar mi código QR
+    </button>
+
+    <img id="qr" alt="Tu código QR aparecerá aquí">
+
+    <p>♡ Comparte este código con tus amigos ♡</p>
+</section>
+
+<footer>
+    <p>Made with love ♡ m4s1</p>
+</footer>
+
+<script>
+const photos = document.getElementById("photos");
+const collage = document.getElementById("collage");
+
+photos.addEventListener("change", function() {
+    Array.from(this.files).forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.className = "photo";
+            img.alt = "Foto del collage";
+            collage.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    this.value = "";
+});
+
+function generarQR() {
+    const url = document.getElementById("url").value.trim();
+
+    if (!url || !/^https?:\/\//i.test(url)) {
+        alert("Primero pega el enlace público de tu página.");
+        return;
+    }
+
+    document.getElementById("qr").src =
+        "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" +
+        encodeURIComponent(url);
+}
+</script>
+
+</body>
+</html>
